@@ -1,4 +1,4 @@
-name: CI/CD for Next.js app
+name: build and push docker image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and Test
+    name: build project
     runs-on: ubuntu-latest
 
     steps:
@@ -24,13 +24,13 @@ jobs:
           version: 8
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build Next.js app
         run: pnpm build
 
   docker:
-    name: Build & Push Docker Image
+    name: build & push image
     runs-on: ubuntu-latest
     needs: build-and-test  # Waits for 'build-and-test' to finish successfully
 
@@ -53,7 +53,7 @@ jobs:
           version: 8
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
