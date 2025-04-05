@@ -1,4 +1,12 @@
 terraform {
+  cloud {
+
+    organization = "reise"
+
+    workspaces {
+      name = "reisearnor"
+    }
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -23,19 +31,19 @@ provider "porkbun" {
 }
 
 resource "porkbun_dns_record" "update_a_record" {
-  domain     = "reisearnor.io"
+  domain = "reisearnor.io"
 
-  type = "A"
-  content = aws_eip.app_server_eip.public_ip
+  type       = "A"
+  content    = aws_eip.app_server_eip.public_ip
   depends_on = [aws_eip.app_server_eip]
 }
 
 resource "porkbun_dns_record" "update_aaaa_record" {
-  domain     = "reisearnor.io"
+  domain = "reisearnor.io"
 
-  subdomain = "www"
-  type = "A"
-  content = aws_eip.app_server_eip.public_ip
+  subdomain  = "www"
+  type       = "A"
+  content    = aws_eip.app_server_eip.public_ip
   depends_on = [porkbun_dns_record.update_a_record]
 }
 
@@ -59,9 +67,8 @@ resource "aws_instance" "app_server" {
   }
 
   vpc_security_group_ids = [aws_security_group.web_and_ssh.id]
-  user_data             = file("${path.module}/start-instance.sh")
-  associate_public_ip_address = false
-  depends_on = [porkbun_dns_record.update_aaaa_record]
+  user_data              = file("${path.module}/start-instance.sh")
+  depends_on             = [porkbun_dns_record.update_aaaa_record]
 }
 
 data "aws_vpc" "default" {
