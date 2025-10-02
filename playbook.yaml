@@ -1,0 +1,109 @@
+- name: Setup Docker and deploy ReiseArnor website
+  hosts: myhosts
+  become: yes
+  vars:
+    docker_image: "ghcr.io/reisearnor/website:latest"
+    container_port: 3000
+    domain: "reisearnor.io"
+    email: "odanisdejesus@gmail.com"
+    make_domain_script_url: "https://gist.githubusercontent.com/ReiseArnor/ac8b97bf67c8b4776c1f26cde29170c8/raw/be6302cff90934c4076c5862c5cfc507a6a04944/make-domain.sh"
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+
+    - name: Create directory for apt keyrings
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download Docker GPG key
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
+
+    - name: Add Docker repository
+      shell: |
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+      args:
+        creates: /etc/apt/sources.list.d/docker.list
+
+    - name: Update apt cache after adding Docker repo
+      apt:
+        update_cache: yes
+
+    - name: Install Docker and related packages
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+          - certbot
+          - nginx
+          - python3-certbot-nginx
+        state: present
+
+    - name: Enable Docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Pull Docker image (always get latest)
+      community.docker.docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+        force_source: yes
+        state: present
+      register: image_pull
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: reisearnor_website
+        image: "{{ docker_image }}"
+        state: started
+        restart_policy: unless-stopped
+        recreate: yes
+        pull: yes
+        ports:
+          - "{{ container_port }}:{{ container_port }}"
+
+    - name: Remove old Docker images
+      community.docker.docker_prune:
+        images: yes
+        images_filters:
+          dangling: false
+
+    - name: Download make-domain script
+      get_url:
+        url: "{{ make_domain_script_url }}"
+        dest: /tmp/make-domain.sh
+        mode: '0755'
+
+    - name: Remove trailing whitespace from script
+      shell: sed -i 's/[[:space:]]*$//' /tmp/make-domain.sh
+
+    - name: Execute make-domain script
+      command: /tmp/make-domain.sh {{ domain }} {{ container_port }} {{ email }}
+      args:
+        chdir: /tmp
+
+    - name: Clean up make-domain script
+      file:
+        path: /tmp/make-domain.sh
+        state: absent

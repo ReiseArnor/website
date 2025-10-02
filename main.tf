@@ -67,7 +67,6 @@ resource "aws_instance" "app_server" {
   }
 
   vpc_security_group_ids = [aws_security_group.web_and_ssh.id]
-  user_data              = file("${path.module}/start-instance.sh")
   depends_on             = [porkbun_dns_record.update_aaaa_record]
 }
 
