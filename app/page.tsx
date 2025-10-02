@@ -567,7 +567,7 @@ export default function Portfolio() {
                   <h3 className="font-bold text-[#B026FF] drop-shadow-[0_0_8px_#B026FF]">Backend Engineer</h3>
                   <p className="text-[#C8C8FF]">Minnek Digital Studio</p>
                 </div>
-                <p className="text-sm text-[#C8C8FF]">Nov 2023 - Present</p>
+                <p className="text-sm text-[#C8C8FF]">Nov 2023 - Sept 2025</p>
               </div>
               <ul className="mt-4 space-y-2 text-sm text-white">
                 <li>• Developed and maintained scalable REST and GraphQL APIs using NestJS and TypeScript</li>
@@ -603,7 +603,7 @@ export default function Portfolio() {
                   </h3>
                   <p className="text-[#C8C8FF]">Palacio de Justicia de La Vega</p>
                 </div>
-                <p className="text-sm text-[#C8C8FF]">Jun 2022 - Jul 2023</p>
+                <p className="text-sm text-[#C8C8FF]">Jun 2022 - Oct 2022</p>
               </div>
               <ul className="mt-4 space-y-2 text-sm text-white">
                 <li>• Provided IT support, troubleshooting hardware and software issues</li>
