@@ -135,7 +135,10 @@ export default function Portfolio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
           >
-            <Button className="bg-[#B026FF] hover:bg-[#B026FF]/80 text-white shadow-[0_0_15px_rgba(176,38,255,0.7)] hover:shadow-[0_0_20px_rgba(176,38,255,0.9)] transition-all">
+            <Button
+              variant="outline"
+              className="text-[#B026FF] border-[#B026FF] hover:bg-[#B026FF]/10 shadow-[0_0_10px_rgba(176,38,255,0.5)] hover:shadow-[0_0_15px_rgba(176,38,255,0.7)] transition-all"
+            >
               <Link href="#contact">Contact Me</Link>
             </Button>
             <Button
@@ -697,7 +700,7 @@ export default function Portfolio() {
                   <div className="flex items-center gap-3">
                     <Linkedin className="h-5 w-5 text-[#B026FF]" />
                     <Link
-                      href="https://linkedin.com/in/odanis-esquea"
+                      href="https://linkedin.com/in/odanisesquea"
                       className="text-white hover:text-[#B026FF] hover:drop-shadow-[0_0_8px_#B026FF] transition-all"
                     >
                       LinkedIn
@@ -706,7 +709,7 @@ export default function Portfolio() {
                   <div className="flex items-center gap-3">
                     <Github className="h-5 w-5 text-[#B026FF]" />
                     <Link
-                      href="https://github.com/odanisdejesus"
+                      href="https://github.com/reisearnor"
                       className="text-white hover:text-[#B026FF] hover:drop-shadow-[0_0_8px_#B026FF] transition-all"
                     >
                       GitHub
@@ -748,10 +751,10 @@ export default function Portfolio() {
             © {new Date().getFullYear()} Odanis Esquea Núñez. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="https://github.com/odanisdejesus" aria-label="Github">
+            <Link href="https://github.com/reisearnor" aria-label="Github">
               <Github className="h-5 w-5 text-[#B026FF] hover:text-[#B026FF] hover:drop-shadow-[0_0_8px_#B026FF] transition-all" />
             </Link>
-            <Link href="https://linkedin.com/in/odanis-esquea" aria-label="LinkedIn">
+            <Link href="https://linkedin.com/in/odanisesquea" aria-label="LinkedIn">
               <Linkedin className="h-5 w-5 text-[#D580FF] hover:text-[#D580FF] hover:drop-shadow-[0_0_8px_#D580FF] transition-all" />
             </Link>
             <Link href="mailto:odanisdejesus@gmail.com" aria-label="Email">
@@ -763,4 +766,3 @@ export default function Portfolio() {
     </div>
   )
 }
-
